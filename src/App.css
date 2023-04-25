@@ -147,6 +147,9 @@ footer{
 }
 @media (max-width: 600px)
 {
+  header{
+    width: 100vw;
+  }
   .containerHome{
     background-image: url("./img/fotoBackgroud.jpeg");
     background-repeat: no-repeat;
