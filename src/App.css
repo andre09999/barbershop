@@ -8,6 +8,7 @@ header{
   align-items: center;
   justify-content: space-around;
   background-color: black;
+  width: 99vw;
 }
 .headerH1{
   color: rgb(167, 76, 167);
@@ -28,8 +29,8 @@ header{
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  width: 100vw;
-  height: 89vh;
+  width: 99vw;
+  height: 86vh;
   background-color: black;
 }
 
