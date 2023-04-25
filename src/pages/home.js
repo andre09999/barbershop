@@ -38,7 +38,7 @@ function Home() {
 
      </Carousel>
      </div>
-     <a href='https://api.whatsapp.com/send?phone=5562982243221&text=Gostaria%20de%20agendar%20meu%20horario' target='_blank' rel="noreferrer" className='agende'>
+     <a href='https://api.whatsapp.com/send?phone=5562982212243&text=Ol%C3%A1+quero+agendar+meu+hor%C3%A1rio' target='_blank' rel="noreferrer" className='agende'>
             <img src={logWpp} alt='logo wpp' className='logo'/>
             <h1>Agende seu Horario</h1>
         </a>
