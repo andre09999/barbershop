@@ -126,7 +126,24 @@ header{
 .endereco:hover{
   color: #A75CD0;
 }
+.footerA{
+  text-decoration: none;
+  color: #ffffff;
+  transition: 1s;
+}
 
+.footerA:hover{
+  color: aquamarine;
+
+}
+footer{
+  color: #ffffff;
+  background-color: rgb(0, 0, 0);
+  text-shadow: 1px 1px 4px rgb(131, 128, 128);
+  text-align: center;
+  font-family: 'Lora', serif;
+  height: 35px;
+}
 @media (max-width: 600px)
 {
   .containerHome{
