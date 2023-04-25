@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap');
+
+.logo{
+  width: 35px;
+}
+header{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: black;
+}
+.headerH1{
+  color: rgb(167, 76, 167);
+  font-family: 'Lora', serif;
+  text-shadow: 1px 1px 8px rgb(116, 98, 98);
+}
+.log{
+  display: flex;
+  gap: 10px;
+}
+
+.logoBarber{
+  width: 100px;
+}
+
+.containerHome{
+  background-image: url("./img/fotoBackgroud.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 89vh;
+  background-color: black;
+}
+
+.logoHome{
+  display: block;
+  position: relative;
+  top: 10vh;
+  left: 37%;
+  width: 50vw;
+}
+
+.logss{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mainh3{
+  color: white;
+  text-align: center;
+  font-size: 28px;
+  width: 350px;
+  font-family: 'Lora', serif;
+  text-shadow: 1px 1px 10px  rgb(211, 7, 211);
+  box-shadow: 1px 5px 10px black;
+}
+
+.logoHomes{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  
+}
+
+.foto{
+  filter: saturate(280%); 
+  filter: contrast(150%);
+  width: 480px;
+  filter:drop-shadow(40px 1px 18px #000000);
+}
+
+.fotos{
+  max-width: 200px;
+  border-radius: 10px;
+}
+
+.centralizar{
+  position: relative;
+  display: block;
+  top: 80px;
+  left: 45%;
+}
+
+.container1{
+  display: flex;
+  align-items: end;
+  justify-content: space-around;
+  margin-top: 90px;
+}
+
+.agende{
+  display: block;
+  position: fixed;
+  top: 85vh;
+  left: 80vw;
+  text-decoration: none;
+  color: #ffffff;
+  gap: 15px;
+  transition: 1s;
+  background-color: rgba(0, 0, 0, 0.315);
+  border-radius: 10px;
+  text-shadow: 1px 1px 4px rgb(131, 128, 128);
+}
+
+.agende:hover{
+  color: #A75CD0;
+}
+
+.endereco{
+  display: block;
+  position: fixed;
+  top: 83vh;
+  left: 2vw;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.315);
+  gap: 15px;
+  transition: 1s;
+  width: 650px;
+  border-radius: 10px;
+  text-shadow: 1px 1px 4px rgb(131, 128, 128);
+}
+
+.endereco:hover{
+  color: #A75CD0;
+}
+
+@media (max-width: 600px)
+{
+  .containerHome{
+    background-image: url("./img/fotoBackgroud.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+  }
+  .header{
+    width: 100vw;
+  }
+  .foto{
+    width: 250px;
+  }
+  .logoHome{
+   display: block;
+   position: relative;
+   left: 18vw;
+   top: 3vh;
+  }
+  .container1{
+    margin: 10px;
+  }
+  .endereco{
+    font-size: 16px;
+    width: 280px;
+    display: block;
+    position: relative;
+    text-align: center;
+    top: 15px;
+    left: 50px;
+  }
+  .agende{
+    text-align: center;
+    display: block;
+    position: relative;
+    font-size: 16px;
+    top: 15px;
+    left: 0px;
+  }
+  .container1{
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+    padding-top: 90px;
+    margin-top: 100px;
+    height: 150px;
+  }
+
+  .headerH1{
+    text-align: center;
+  }
+  .fotos{
+    height: 200px;
+  }
+}
