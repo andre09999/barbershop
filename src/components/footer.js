@@ -4,7 +4,7 @@ function Footer() {
   return (
 
       <footer >
-       <p>Criado e desenvolvido por<a className='footerA' href='https://portifoiliowebandre.netlify.app/' target='_blank' rel="noreferrer"> Andre Luis</a> </p>
+       <p>Criado e desenvolvido por<a className='footerA' href='https://portifoiliowebandre.netlify.app/' target='_blank' rel="noreferrer"> Andre Luis &reg;</a> </p>
       </footer>
 
   );
