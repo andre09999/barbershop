@@ -12,7 +12,7 @@ function Header() {
         <a href='https://www.instagram.com/oliveer_barbearia/' target='_blank' rel="noreferrer">
             <img src={logInsta} alt='logo insta' className='logo'/>
         </a>
-        <a href='https://api.whatsapp.com/send?phone=5562982243221&text=Gostaria%20de%20agendar%20meu%20horario' target='_blank' rel="noreferrer">
+        <a href='https://api.whatsapp.com/send?phone=5562982212243&text=Ol%C3%A1+quero+agendar+meu+hor%C3%A1rio' target='_blank' rel="noreferrer">
             <img src={logWpp} alt='logo wpp' className='logo'/>
         </a>
         </div>
