@@ -75,6 +75,9 @@ header{
 .fotos{
   max-width: 200px;
   border-radius: 10px;
+  border-radius: 180px;
+  filter:drop-shadow(40px 8px 18px #000000);
+  
 }
 
 .centralizar{
