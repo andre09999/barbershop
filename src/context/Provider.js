@@ -12,8 +12,8 @@ function MeuProvider({ children }) {
   const [checks, setChecks] = useState()
   const[disab, setDisab]= useState(true)
   useEffect(() => {
-    console.log(barbeiro,telefone,nome,telefone, serviço?.service)
-    if(serviço.service?.length > 0 &&  telefone.length > 10 && telefone.length < 12 &&  nome.length > 3 ){
+
+    if(serviço.service?.length > 0 &&  telefone.length > 15 && telefone.length < 17 &&  nome.length > 3 ){
       setBot('agendar')
       return setDisab(false)
     }
