@@ -172,6 +172,7 @@ form{
   flex-direction: column;
   gap: 15px;
   padding-top: 30vh;
+
 }
 .containerServices{
   display: flex;
@@ -192,10 +193,10 @@ form{
 }
 
 .service input:checked + span{
-  background-color: #404B9C;
-  background-image: url('https://poltronanerd.com.br/wp-content/uploads/2020/06/Punisher-Logo-Quiz.jpg');
+  background-color: #272727;
+  background-image: url('./img/333733591_873102923801425_5641639317677690573_n-removebg-preview.png');
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   color: #ffffff;
   font-weight: bolder;
@@ -256,14 +257,14 @@ footer{
   }
 
   .efeitoVidro{
-    width: 80vw;
+    width: 90vw;
   }
 
   .centro{
     position: relative;
     display: block;
     top: 15vh;
-    left: 10vw;
+    left: 5vw;
     width: 65vw;
   }
 
