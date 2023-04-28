@@ -9,6 +9,8 @@ import logWpp from '../img/icones/whatsapp.png'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
+
+
 function Home() {
   return (
     <div className="containerHome">
@@ -47,7 +49,7 @@ function Home() {
             <h1>Rua 101 Unidade 101, Pq Atheneu, Goiânia GO, 74890-420, Brasil</h1>
         </a>
      </div>
-   
+    
   );
 }
 

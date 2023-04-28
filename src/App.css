@@ -34,6 +34,16 @@ header{
   background-color: black;
 }
 
+.containerAgenda{
+  background-image: url("./img/fotoBackgroud.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 84vh;
+  background-color: black;
+}
+
 .logoHome{
   display: block;
   position: relative;
@@ -140,6 +150,85 @@ header{
   color: aquamarine;
 
 }
+.option{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+select{
+    border-radius: 15px;
+    padding: 5px;
+    text-align: center;
+  }
+ input{
+  border-radius: 15px;
+  text-align: center;
+ } 
+form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 30vh;
+}
+.containerServices{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.service{
+  border-radius: 15px;
+  padding: 10px;
+  color: #ffffff;
+  border: 1px solid black;
+  background-color: #A75CD0;
+  text-shadow: 1px 1px 4px rgb(5, 5, 5);
+}
+.check{
+  display: none;
+}
+
+.service input:checked + span{
+  background-color: #404B9C;
+  background-image: url('https://poltronanerd.com.br/wp-content/uploads/2020/06/Punisher-Logo-Quiz.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #ffffff;
+  font-weight: bolder;
+  text-shadow: 1px 1px 5px black;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.efeitoVidro{
+  background: rgba(110, 110, 110, 0.452);
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 1px );
+  -webkit-backdrop-filter: blur( 8px );
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.205);
+  width: 30vw;
+  padding-bottom: 10vh;
+  padding-top: 10vh;
+}
+.agendar{
+  border-radius: 15px;
+  padding: 10px;
+  color: #ffffff;
+  border: 1px solid black;
+  background-color: #A75CD0;
+  text-shadow: 1px 1px 4px rgb(5, 5, 5);
+}
+.Dis{
+  display: none;
+}
+
 footer{
   color: #ffffff;
   background-color: rgb(0, 0, 0);
@@ -148,10 +237,41 @@ footer{
   font-family: 'Lora', serif;
   height: 35px;
 }
+.h3Agenda{
+  color: #ffffff;
+  text-shadow: 1px 1px 4px rgb(131, 128, 128);
+}
+
+.centro{
+  position: relative;
+  display: block;
+  top: 15vh;
+  left: 35vw;
+}
+
 @media (max-width: 600px)
 {
   header{
     width: 100vw;
+  }
+
+  .efeitoVidro{
+    width: 80vw;
+  }
+
+  .centro{
+    position: relative;
+    display: block;
+    top: 15vh;
+    left: 10vw;
+    width: 65vw;
+  }
+
+  .option{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
   }
   .containerHome{
     background-image: url("./img/fotoBackgroud.jpeg");
@@ -161,6 +281,14 @@ footer{
     width: 100vw;
     height: 100vh;
     background-color: black;
+  }
+  .h3Agenda{
+    color: #ffffff;
+    text-shadow: 1px 1px 4px rgb(131, 128, 128);
+    text-align: center;
+  }
+  p{
+    margin: 0;
   }
   .header{
     width: 100vw;
