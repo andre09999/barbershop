@@ -8,7 +8,7 @@ header{
   align-items: center;
   justify-content: space-around;
   background-color: black;
-  width: 99vw;
+  width: 100vw;
 }
 .headerH1{
   color: rgb(167, 76, 167);
@@ -19,6 +19,7 @@ header{
   display: flex;
   gap: 10px;
 }
+
 
 .logoBarber{
   width: 100px;
@@ -144,6 +145,7 @@ header{
   text-decoration: none;
   color: #ffffff;
   transition: 1s;
+
 }
 
 .footerA:hover{
@@ -231,12 +233,15 @@ form{
 }
 
 footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #ffffff;
   background-color: rgb(0, 0, 0);
   text-shadow: 1px 1px 4px rgb(131, 128, 128);
   text-align: center;
   font-family: 'Lora', serif;
-  height: 35px;
+  height: 93px;
 }
 .h3Agenda{
   color: #ffffff;
@@ -267,12 +272,18 @@ footer{
     left: 5vw;
     width: 65vw;
   }
+  select{
+    border-radius: 15px;
+    padding: 5px;
+    text-align: center;
+    width: 150px;
+  }
 
   .option{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1px;
+    gap: 10px;
   }
   .containerHome{
     background-image: url("./img/fotoBackgroud.jpeg");
@@ -338,5 +349,10 @@ footer{
   }
   .fotos{
     height: 200px;
+  }
+
+  footer{
+    padding-top: 10px;
+    height: 35px;
   }
 }

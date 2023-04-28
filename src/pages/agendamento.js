@@ -42,9 +42,9 @@ function Agendamento() {
         <form onSubmit={agenda} className='efeitoVidro'>
             <label className="option">
                 <h3 className='h3Agenda'>Escolha seu barbeiro:</h3>
-        <select value={barbeiro} onChange={({target})=> setbarbeiro(target.value)}>
-            <option value="Athus">Athus</option>
-            <option selected value="Gabriel">Gabriel</option>
+                <select value={barbeiro} onChange={({target})=> setbarbeiro(target.value)}>
+                    <option value="Athus">Athus</option>
+                    <option selected value="Gabriel">Gabriel</option>
         </select>
         </label>
            <input type='text' placeholder='Digite Seu Nome' value={nome} onChange={({target})=> setNome(target.value)}/>
