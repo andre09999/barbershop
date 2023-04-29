@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import '../App.css';
 import MyContext from '../context/Context';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 function Agendamento() {
     const {
@@ -9,12 +10,28 @@ function Agendamento() {
         telefone, setTelefone,
         nome, setNome,
         disab,
-        bot, } = useContext(MyContext)
-
+        bot, 
+        data, arrey, setAgendamento,} = useContext(MyContext)
+      const [dataAtual, setDAtaAtual]= useState()
+      const [tual, setTual]= useState()
     const agenda = (a) => {
         a.preventDefault();
         console.log(barbeiro,serviço, telefone, nome)
       }
+      useEffect(() => {
+        setTual(data.split('/').reverse().join('-'))
+        setDAtaAtual(data.split('/').reverse().join('-'))
+      }, []);
+    const calender = (a) => {
+      setTual(a.value)
+      console.log(a.value.split('-').reverse().join('/'))
+    }
+
+    const cheHora = (a) => {
+      console.log(a.value)
+         return setAgendamento({date: [a.name]}) 
+    }
+
       const che = (a) => {
         if(a.checked){
             const servicoss = serviço?.service
@@ -43,7 +60,7 @@ function Agendamento() {
                 <h3 className='h3Agenda'>Escolha seu barbeiro:</h3>
                 <select value={barbeiro} onChange={({target})=> setbarbeiro(target.value)}>
                     <option value="Athus">Athus</option>
-                    <option selected value="Gabriel">Gabriel</option>
+                    <option defaultValue='Gabriel' value="Gabriel">Gabriel</option>
         </select>
         </label>
            <input type='text' placeholder='Digite Seu Nome' value={nome} onChange={({target})=> setNome(target.value)}/>
@@ -59,7 +76,18 @@ function Agendamento() {
            <span>Cabelo Masculino</span>
             </label>
         </div>
-            
+
+              <label className="services">
+                <h3 className='h3Agenda'>Escolha seu horario:</h3>
+                <input type='date' value={tual} min={dataAtual} onChange={({target}) => calender(target)} max="2023-12-31"/>
+                <select  onChange={({target})=> cheHora(target)}>
+            {arrey.map(a => (
+                    <option key={a} name={a}>{a}</option>
+              ))}
+              </select>
+              </label>
+              
+                          
         <button disabled={disab} className={bot} type='submit'>Agendar</button>
         </form>
         </div>

@@ -11,6 +11,9 @@ function MeuProvider({ children }) {
   const [bot, setBot] = useState('Dis')
   const [checks, setChecks] = useState()
   const[disab, setDisab]= useState(true)
+  const[data, setData]= useState(new Date(Date.now()).toLocaleString().split(',')[0])
+  const[arrey]= useState( [ "09:00", "09:30","10:00","10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00","15:30","16:00", "16:30","17:00","17:30","18:00","18:30"])
+ 
   useEffect(() => {
 
     if(serviço.service?.length > 0 &&  telefone.length > 15 && telefone.length < 17 &&  nome.length > 3 ){
@@ -28,8 +31,10 @@ function MeuProvider({ children }) {
     telefone, setTelefone,
     nome, setNome,
     disab, setDisab,
-    bot, setBot
-  }), [agendamento, checks, barbeiro, serviço, telefone, nome, disab, bot]);
+    bot, setBot,
+    data, setData,
+    arrey
+  }), [agendamento, checks, barbeiro, serviço, telefone, nome, disab, bot, data, arrey]);
 
   return (
     <MyContext.Provider value={ contextValue }>
