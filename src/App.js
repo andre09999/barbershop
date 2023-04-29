@@ -8,9 +8,7 @@ import Agendamento from './pages/agendamento';
 import MyContext from '../src/context/Context';
 
 function App() {
-    const {agendamento, setAgendamento, checks, setChecks} = useContext(MyContext)
-  
-  
+
   return (
     <div>
     <Header/>
@@ -19,7 +17,7 @@ function App() {
           <Redirect to='/home'/>
         </Route>
         <Route path='/home' component={  Home } />
-        <Route path='/Agendamento'  setChecks={setChecks} component={ Agendamento } />
+        <Route path='/Agendamento'  component={ Agendamento } />
         <Route path='*' element={<h1>Not Found</h1>} />
       </Switch>
       <Footer/>

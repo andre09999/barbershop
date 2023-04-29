@@ -1,16 +1,15 @@
 import '../App.css';
 import MyContext from '../context/Context';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 function Agendamento() {
-    const {agendamento, setAgendamento, 
-        checks, setChecks, 
+    const {
         barbeiro, setbarbeiro,
         serviço, setserviço,
         telefone, setTelefone,
         nome, setNome,
         disab,
-        bot, setBot} = useContext(MyContext)
+        bot, } = useContext(MyContext)
 
     const agenda = (a) => {
         a.preventDefault();
@@ -60,6 +59,7 @@ function Agendamento() {
            <span>Cabelo Masculino</span>
             </label>
         </div>
+            
         <button disabled={disab} className={bot} type='submit'>Agendar</button>
         </form>
         </div>

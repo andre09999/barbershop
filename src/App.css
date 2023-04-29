@@ -254,6 +254,15 @@ footer{
   top: 15vh;
   left: 35vw;
 }
+.calender{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 250px;
+  height: 280px;
+  border-radius: 15px;
+}
 
 @media (max-width: 600px)
 {
@@ -355,4 +364,5 @@ footer{
     padding-top: 10px;
     height: 35px;
   }
+
 }
