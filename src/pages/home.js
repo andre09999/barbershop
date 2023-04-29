@@ -1,4 +1,5 @@
 import '../App.css';
+import { Link } from 'react-router-dom';
 import logo from '../img/333733591_873102923801425_5641639317677690573_n-removebg-preview.png'
 import img1 from '../img/carrossel/1.jpg'
 import img2 from '../img/carrossel/2.jpg'
@@ -48,6 +49,7 @@ function Home() {
             <img src={maos} alt='logo wpp' className='logo'/>
             <h1>Rua 101 Unidade 101, Pq Atheneu, Goiânia GO, 74890-420, Brasil</h1>
         </a>
+        <Link to="/Agendamento" >#</Link>
      </div>
     
   );
