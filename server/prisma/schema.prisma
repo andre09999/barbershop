@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PLATFORM_ADMIN
+  BUSINESS_OWNER
+  CUSTOMER
+}
+
+enum BusinessCategory {
+  BARBERSHOP
+  SALON
+  CLINIC
+}
+
+enum BusinessStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  phone        String?
+  passwordHash String
+  role         Role
+  businessId   String?
+  business     Business?     @relation("BusinessMembers", fields: [businessId], references: [id])
+  ownedBusiness Business?    @relation("BusinessOwner")
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([businessId, role])
+}
+
+model Business {
+  id           String             @id @default(cuid())
+  slug         String             @unique
+  name         String
+  category     BusinessCategory
+  description  String
+  phone        String
+  whatsapp     String
+  address      String
+  accent       String             @default("#7257f6")
+  logoUrl      String?
+  openingTime  String             @default("09:00")
+  closingTime  String             @default("18:00")
+  workingDays  Int[]
+  status       BusinessStatus     @default(ACTIVE)
+  ownerId      String             @unique
+  owner        User               @relation("BusinessOwner", fields: [ownerId], references: [id])
+  members      User[]             @relation("BusinessMembers")
+  services     Service[]
+  professionals Professional[]
+  appointments Appointment[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model Service {
+  id           String        @id @default(cuid())
+  businessId   String
+  business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name         String
+  description  String
+  duration     Int
+  priceInCents Int
+  active       Boolean       @default(true)
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([businessId, active])
+}
+
+model Professional {
+  id           String        @id @default(cuid())
+  businessId   String
+  business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name         String
+  specialty    String
+  active       Boolean       @default(true)
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([businessId, active])
+}
+
+model Appointment {
+  id             String             @id @default(cuid())
+  businessId     String
+  business       Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  serviceId      String
+  service        Service            @relation(fields: [serviceId], references: [id])
+  professionalId String
+  professional   Professional       @relation(fields: [professionalId], references: [id])
+  customerId     String?
+  customer       User?              @relation(fields: [customerId], references: [id])
+  customerName   String
+  customerPhone  String
+  date           String
+  time           String
+  notes          String?
+  status         AppointmentStatus  @default(CONFIRMED)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@unique([professionalId, date, time])
+  @@index([businessId, date, status])
+  @@index([customerId, date])
+}
