@@ -1,26 +1,35 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
-import './App.css';
-import Header from './components/Header';
-import Footer from './components/footer';
-import Home from './pages/home';
-import Agendamento from './pages/agendamento';
+import { Redirect, Route, Switch } from "react-router-dom";
+import { usePlatform } from "./context/PlatformContext";
+import BookingPage from "./pages/BookingPage";
+import DashboardPage from "./pages/DashboardPage";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import "./App.css";
 
-function App() {
-
+function ProtectedRoute({ children, ...routeProps }) {
+  const { session } = usePlatform();
   return (
-    <div>
-    <Header/>
-    <Switch>
-        <Route exact path='/'  >
-          <Redirect to='/home'/>
-        </Route>
-        <Route path='/home' component={  Home } />
-        <Route path='/Agendamento'  component={ Agendamento } />
-        <Route path='*' element={<h1>Not Found</h1>} />
-      </Switch>
-      <Footer/>
-    </div>
+    <Route
+      {...routeProps}
+      render={({ location }) =>
+        session ? children : <Redirect to={{ pathname: "/entrar", state: { from: location } }} />
+      }
+    />
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Switch>
+      <Route exact path="/" component={LandingPage} />
+      <Route exact path="/entrar" component={LoginPage} />
+      <Route exact path="/agendar/:slug" component={BookingPage} />
+      <ProtectedRoute path="/painel">
+        <DashboardPage />
+      </ProtectedRoute>
+      <Route>
+        <Redirect to="/" />
+      </Route>
+    </Switch>
+  );
+}
