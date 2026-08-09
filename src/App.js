@@ -7,12 +7,13 @@ import LoginPage from "./pages/LoginPage";
 import "./App.css";
 
 function ProtectedRoute({ children, ...routeProps }) {
-  const { session } = usePlatform();
+  const { session, authLoading } = usePlatform();
   return (
     <Route
       {...routeProps}
       render={({ location }) =>
-        session ? children : <Redirect to={{ pathname: "/entrar", state: { from: location } }} />
+        authLoading ? <div className="page-loading" role="status">Carregando ambiente seguro…</div> :
+          session ? children : <Redirect to={{ pathname: "/entrar", state: { from: location } }} />
       }
     />
   );

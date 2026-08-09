@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PublicHeader } from "../components/AppShell";
-import { CATEGORY_LABELS } from "../data/seed";
-import { usePlatform } from "../context/PlatformContext";
+import { api } from "../lib/api";
+import { CATEGORY_LABELS } from "../lib/constants";
 
 const benefits = [
   {
@@ -22,8 +23,17 @@ const benefits = [
 ];
 
 export default function LandingPage() {
-  const { data } = usePlatform();
-  const activeBusinesses = data.businesses.filter((business) => business.status === "active");
+  const [activeBusinesses, setActiveBusinesses] = useState([]);
+  const [loadingBusinesses, setLoadingBusinesses] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    api.publicBusinesses()
+      .then(({ businesses }) => active && setActiveBusinesses(businesses))
+      .catch(() => active && setActiveBusinesses([]))
+      .finally(() => active && setLoadingBusinesses(false));
+    return () => { active = false; };
+  }, []);
 
   return (
     <div className="landing-page">
@@ -39,11 +49,11 @@ export default function LandingPage() {
                 crescerem com processos simples e uma experiência memorável.
               </p>
               <div className="hero__actions">
-                <Link className="button button--primary" to="/agendar/oliveer-barbearia">
-                  Experimentar agendamento
-                </Link>
+                <a className="button button--primary" href="#segmentos">
+                  Encontrar estabelecimento
+                </a>
                 <Link className="button button--secondary" to="/entrar">
-                  Acessar demonstração
+                  Acessar plataforma
                 </Link>
               </div>
               <div className="hero__proof" aria-label="Benefícios rápidos">
@@ -109,6 +119,7 @@ export default function LandingPage() {
                   <Link to={`/agendar/${business.slug}`}>Ver agenda <span aria-hidden="true">→</span></Link>
                 </article>
               ))}
+              {loadingBusinesses && <article className="business-card business-card--placeholder"><span className="business-card__mark">…</span><div><span className="eyebrow">Consultando agenda</span><h3>Carregando estabelecimentos</h3><p>Os dados estão sendo buscados com segurança.</p></div></article>}
               <article className="business-card business-card--placeholder">
                 <span className="business-card__mark">+</span>
                 <div><span className="eyebrow">Sua próxima operação</span><h3>Marca personalizada</h3><p>Cadastre uma nova empresa e entregue um ambiente exclusivo ao responsável.</p></div>

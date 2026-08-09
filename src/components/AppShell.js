@@ -1,5 +1,5 @@
 import { Link, NavLink, useHistory } from "react-router-dom";
-import { ROLE_LABELS } from "../data/seed";
+import { ROLE_LABELS } from "../lib/constants";
 import { usePlatform } from "../context/PlatformContext";
 
 export function Brand({ compact = false }) {
@@ -24,7 +24,7 @@ export function PublicHeader() {
         <nav aria-label="Navegação principal">
           <a href="/#recursos">Recursos</a>
           <a href="/#segmentos">Segmentos</a>
-          <Link to="/agendar/oliveer-barbearia">Agendar demonstração</Link>
+          <a href="/#segmentos">Encontrar estabelecimento</a>
         </nav>
         <Link className="button button--small button--dark" to={session ? "/painel" : "/entrar"}>
           {session ? "Abrir painel" : "Entrar"}
@@ -35,20 +35,20 @@ export function PublicHeader() {
 }
 
 const navByRole = {
-  platform_admin: [
+  PLATFORM_ADMIN: [
     ["/painel", "Visão geral"],
     ["/painel/empresas", "Estabelecimentos"],
     ["/painel/configuracoes", "Configurações"],
   ],
-  business_owner: [
+  BUSINESS_OWNER: [
     ["/painel", "Visão geral"],
     ["/painel/agenda", "Agenda"],
     ["/painel/servicos", "Serviços"],
     ["/painel/personalizacao", "Personalização"],
   ],
-  customer: [
+  CUSTOMER: [
     ["/painel", "Meus agendamentos"],
-    ["/agendar/oliveer-barbearia", "Novo agendamento"],
+    ["/#segmentos", "Novo agendamento"],
   ],
 };
 
@@ -56,9 +56,9 @@ export function DashboardShell({ children }) {
   const { session, signOut } = usePlatform();
   const history = useHistory();
 
-  const handleSignOut = () => {
-    signOut();
-    history.push("/");
+  const handleSignOut = async () => {
+    await signOut();
+    history.replace("/");
   };
 
   return (
@@ -73,7 +73,7 @@ export function DashboardShell({ children }) {
           </div>
         </div>
         <nav className="sidebar__nav" aria-label="Menu do painel">
-          {navByRole[session.role].map(([path, label], index) => (
+          {(navByRole[session.role] || []).map(([path, label], index) => (
             <NavLink exact={index === 0} activeClassName="is-active" key={path} to={path}>
               <span aria-hidden="true">{["◫", "◇", "＋", "◌"][index]}</span>
               {label}
@@ -94,6 +94,7 @@ export function DashboardShell({ children }) {
             Ver plataforma
           </Link>
         </header>
+        {session.mustChangePassword && <div className="security-banner" role="status"><strong>Troca de senha necessária.</strong><span>Use a área de segurança do painel para substituir a senha inicial.</span></div>}
         <main>{children}</main>
       </div>
     </div>

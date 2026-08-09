@@ -1,18 +1,48 @@
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { Brand } from "../components/AppShell";
-import { ROLE_LABELS } from "../data/seed";
 import { usePlatform } from "../context/PlatformContext";
+import { maskPhone } from "../lib/platformStore";
+
+const loginInitial = { email: "", password: "" };
+const registerInitial = { name: "", email: "", phone: "", password: "", passwordConfirmation: "" };
 
 export default function LoginPage() {
-  const { data, signInAs } = usePlatform();
-  const [selectedUser, setSelectedUser] = useState(data.users[0].id);
+  const { session, authLoading, signIn, registerCustomer } = usePlatform();
+  const [mode, setMode] = useState("login");
+  const [loginForm, setLoginForm] = useState(loginInitial);
+  const [registerForm, setRegisterForm] = useState(registerInitial);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const history = useHistory();
+  const location = useLocation();
 
-  const handleSubmit = (event) => {
+  if (!authLoading && session) return <Redirect to="/painel" />;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    signInAs(selectedUser);
-    history.push("/painel");
+    setError("");
+    if (mode === "register" && registerForm.password !== registerForm.passwordConfirmation) {
+      setError("A confirmação de senha não corresponde.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      if (mode === "login") await signIn(loginForm);
+      else {
+        await registerCustomer({
+          name: registerForm.name,
+          email: registerForm.email,
+          phone: registerForm.phone,
+          password: registerForm.password,
+        });
+      }
+      history.replace(location.state?.from?.pathname || "/painel");
+    } catch (submitError) {
+      setError(submitError.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -20,33 +50,49 @@ export default function LoginPage() {
       <section className="auth-showcase">
         <Brand />
         <div>
-          <span className="pill pill--dark">Ambiente de demonstração</span>
-          <h1>Uma visão diferente para cada responsabilidade.</h1>
-          <p>Explore a plataforma como administrador, responsável pelo estabelecimento ou cliente.</p>
+          <span className="pill pill--dark">Acesso protegido</span>
+          <h1>Sua agenda, sua equipe e seus clientes no mesmo lugar.</h1>
+          <p>Cada perfil enxerga somente o necessário, com dados persistidos e permissões verificadas pela API.</p>
         </div>
         <div className="auth-showcase__stats">
           <div><strong>3</strong><span>níveis de acesso</span></div>
-          <div><strong>1</strong><span>experiência integrada</span></div>
+          <div><strong>24h</strong><span>disponível para reservas</span></div>
         </div>
       </section>
       <section className="auth-panel">
         <Link className="back-link" to="/">← Voltar para o início</Link>
         <form className="auth-card" onSubmit={handleSubmit}>
-          <span className="eyebrow">Acesso à plataforma</span>
-          <h2>Escolha um perfil</h2>
-          <p>Na produção, este acesso será protegido por e-mail, senha segura e permissões da API.</p>
-          <div className="profile-options">
-            {data.users.slice(0, 3).map((user) => (
-              <label className={selectedUser === user.id ? "profile-option is-selected" : "profile-option"} key={user.id}>
-                <input checked={selectedUser === user.id} name="profile" onChange={() => setSelectedUser(user.id)} type="radio" value={user.id} />
-                <span className="avatar">{user.name.charAt(0)}</span>
-                <span><strong>{user.name}</strong><small>{ROLE_LABELS[user.role]}</small></span>
-                <span className="profile-option__check" aria-hidden="true">✓</span>
-              </label>
-            ))}
+          <span className="eyebrow">Área segura</span>
+          <h2>{mode === "login" ? "Entrar na plataforma" : "Criar conta de cliente"}</h2>
+          <p>{mode === "login" ? "Use seu e-mail e senha para acessar o painel correspondente ao seu perfil." : "Cadastre-se para reunir seus agendamentos e histórico em uma única conta."}</p>
+          <div className="auth-tabs" role="tablist" aria-label="Tipo de acesso">
+            <button aria-selected={mode === "login"} className={mode === "login" ? "is-active" : ""} onClick={() => { setMode("login"); setError(""); }} role="tab" type="button">Já tenho acesso</button>
+            <button aria-selected={mode === "register"} className={mode === "register" ? "is-active" : ""} onClick={() => { setMode("register"); setError(""); }} role="tab" type="button">Sou cliente novo</button>
           </div>
-          <button className="button button--primary button--full" type="submit">Entrar na demonstração</button>
-          <small className="form-note">Nenhuma senha real é utilizada ou armazenada nesta demonstração.</small>
+          {mode === "login" ? (
+            <div className="auth-fields">
+              <label className="field"><span>E-mail</span><input autoComplete="email" onChange={(event) => setLoginForm({ ...loginForm, email: event.target.value })} required type="email" value={loginForm.email} /></label>
+              <label className="field"><span>Senha</span><input autoComplete="current-password" minLength="8" onChange={(event) => setLoginForm({ ...loginForm, password: event.target.value })} required type="password" value={loginForm.password} /></label>
+            </div>
+          ) : (
+            <div className="auth-fields">
+              <label className="field"><span>Nome completo</span><input autoComplete="name" onChange={(event) => setRegisterForm({ ...registerForm, name: event.target.value })} required value={registerForm.name} /></label>
+              <div className="field-grid">
+                <label className="field"><span>E-mail</span><input autoComplete="email" onChange={(event) => setRegisterForm({ ...registerForm, email: event.target.value })} required type="email" value={registerForm.email} /></label>
+                <label className="field"><span>WhatsApp</span><input autoComplete="tel" onChange={(event) => setRegisterForm({ ...registerForm, phone: maskPhone(event.target.value) })} required value={registerForm.phone} /></label>
+              </div>
+              <div className="field-grid">
+                <label className="field"><span>Senha</span><input autoComplete="new-password" minLength="12" onChange={(event) => setRegisterForm({ ...registerForm, password: event.target.value })} required type="password" value={registerForm.password} /></label>
+                <label className="field"><span>Confirmar senha</span><input autoComplete="new-password" minLength="12" onChange={(event) => setRegisterForm({ ...registerForm, passwordConfirmation: event.target.value })} required type="password" value={registerForm.passwordConfirmation} /></label>
+              </div>
+              <small className="password-hint">Mínimo de 12 caracteres, com maiúscula, minúscula, número e símbolo.</small>
+            </div>
+          )}
+          {error && <p className="form-error" role="alert">{error}</p>}
+          <button className="button button--primary button--full" disabled={submitting || authLoading} type="submit">
+            {submitting ? "Validando acesso…" : mode === "login" ? "Entrar com segurança" : "Criar minha conta"}
+          </button>
+          <small className="form-note">A sessão é protegida em cookie seguro; sua senha nunca é enviada de volta ao navegador.</small>
         </form>
       </section>
     </main>

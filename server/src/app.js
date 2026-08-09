@@ -1,4 +1,5 @@
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -14,12 +15,14 @@ app.disable("x-powered-by");
 app.use(helmet());
 app.use(
   cors({
+    credentials: true,
     origin(origin, callback) {
       if (!origin || env.corsOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Origem não autorizada."));
     },
   })
 );
+app.use(cookieParser());
 app.use(express.json({ limit: "300kb" }));
 app.use(
   "/api",
@@ -31,7 +34,12 @@ app.use(
   })
 );
 
-app.get("/health", (_req, res) => res.json({ status: "ok", service: "agenda-pro-api" }));
+app.get("/health", (_req, res) => res.json({
+  status: env.DATABASE_URL && env.JWT_SECRET ? "ok" : "configuration_required",
+  service: "agenda-pro-api",
+  databaseConfigured: Boolean(env.DATABASE_URL),
+  authenticationConfigured: Boolean(env.JWT_SECRET),
+}));
 app.use("/api/auth", authRoutes);
 app.use("/api/public", publicRoutes);
 app.use("/api/admin", adminRoutes);

@@ -32,18 +32,22 @@ enum AppointmentStatus {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  name         String
-  email        String        @unique
-  phone        String?
-  passwordHash String
-  role         Role
-  businessId   String?
-  business     Business?     @relation("BusinessMembers", fields: [businessId], references: [id])
-  ownedBusiness Business?    @relation("BusinessOwner")
-  appointments Appointment[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id                   String                     @id @default(cuid())
+  name                 String
+  email                String                     @unique
+  phone                String?
+  passwordHash         String
+  role                 Role
+  active               Boolean                    @default(true)
+  mustChangePassword   Boolean                    @default(false)
+  businessId           String?
+  business             Business?                  @relation("BusinessMembers", fields: [businessId], references: [id])
+  ownedBusiness        Business?                  @relation("BusinessOwner")
+  appointments         Appointment[]
+  appointmentChanges   AppointmentStatusHistory[] @relation("AppointmentHistoryActor")
+  auditLogs            AuditLog[]                 @relation("AuditActor")
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
 
   @@index([businessId, role])
 }
@@ -69,6 +73,7 @@ model Business {
   services     Service[]
   professionals Professional[]
   appointments Appointment[]
+  auditLogs    AuditLog[]
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 }
@@ -119,10 +124,53 @@ model Appointment {
   time           String
   notes          String?
   status         AppointmentStatus  @default(CONFIRMED)
+  statusHistory  AppointmentStatusHistory[]
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
 
-  @@unique([professionalId, date, time])
+  @@index([professionalId, date, time])
   @@index([businessId, date, status])
   @@index([customerId, date])
+}
+
+model AppointmentStatusHistory {
+  id            String             @id @default(cuid())
+  appointmentId String
+  appointment   Appointment        @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  fromStatus    AppointmentStatus?
+  toStatus      AppointmentStatus
+  changedById   String?
+  changedBy     User?              @relation("AppointmentHistoryActor", fields: [changedById], references: [id], onDelete: SetNull)
+  note          String?
+  createdAt     DateTime           @default(now())
+
+  @@index([appointmentId, createdAt])
+  @@index([changedById, createdAt])
+}
+
+model AuditLog {
+  id         String    @id @default(cuid())
+  actorId    String?
+  actor      User?     @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime  @default(now())
+
+  @@index([businessId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId])
+}
+
+model PlatformSettings {
+  id                String   @id @default("platform")
+  platformName      String   @default("AgendaPro")
+  supportEmail      String?
+  defaultAccent     String   @default("#7257f6")
+  bookingWindowDays Int      @default(90)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

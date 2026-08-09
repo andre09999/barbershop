@@ -4,9 +4,9 @@ import { z } from "zod";
 const schema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.coerce.number().int().positive().default(4000),
-  DATABASE_URL: z.string().min(1),
-  JWT_SECRET: z.string().min(32),
-  CORS_ORIGINS: z.string().default("http://localhost:3000"),
+  DATABASE_URL: z.string().min(1).optional(),
+  JWT_SECRET: z.string().min(32).optional(),
+  CORS_ORIGINS: z.string().default("http://localhost:3000,https://agenda-pro-andre.vercel.app"),
   WHATSAPP_GRAPH_VERSION: z.string().default("v23.0"),
   WHATSAPP_PHONE_NUMBER_ID: z.string().optional(),
   WHATSAPP_ACCESS_TOKEN: z.string().optional(),
@@ -23,5 +23,15 @@ if (!result.success) {
 
 export const env = {
   ...result.data,
-  corsOrigins: result.data.CORS_ORIGINS.split(",").map((origin) => origin.trim()).filter(Boolean),
+  corsOrigins: [
+    ...result.data.CORS_ORIGINS.split(","),
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+  ].map((origin) => origin.trim()).filter(Boolean),
 };
+
+export function requireJwtSecret() {
+  if (!env.JWT_SECRET) {
+    throw new Error("JWT_SECRET não foi configurado no ambiente protegido.");
+  }
+  return env.JWT_SECRET;
+}

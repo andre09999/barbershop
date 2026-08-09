@@ -1,60 +1,63 @@
 # AgendaPro
 
-Plataforma multiempresa de agendamentos criada para barbearias, salões de beleza e clínicas. O projeto evolui a antiga landing page da Oliveer Barbearia para um produto SaaS responsivo, acessível e preparado para operação real.
+Plataforma SaaS multiempresa para barbearias, salões de beleza e clínicas. O projeto reúne agenda pública, gestão do estabelecimento, histórico do cliente e administração central em uma aplicação responsiva.
 
-## Experiência entregue
+## Recursos
 
-- página institucional moderna e responsiva;
-- agenda personalizada por estabelecimento, com identidade e endereço próprios;
-- seleção de serviço, profissional, data e horário sem conflitos;
-- cadastro de serviços, duração e valores pelo responsável da empresa;
-- painel exclusivo para administrador da plataforma, responsável e cliente;
-- criação de novos estabelecimentos apenas pelo administrador;
-- histórico de múltiplos agendamentos por cliente;
-- persistência local para demonstração sem backend;
-- API Node.js/PostgreSQL com autorização por função e isolamento multiempresa;
-- confirmação automática preparada para a API oficial do WhatsApp Cloud;
-- fallback seguro para confirmação manual quando o provedor não está configurado.
-
-## Perfis da demonstração
-
-Em `/entrar`, selecione um dos três perfis:
-
-- administrador da plataforma: cadastra empresas e responsáveis;
-- responsável pelo estabelecimento: gerencia catálogo, agenda e marca;
-- cliente: acompanha reservas e cria novos agendamentos.
-
-A demonstração não solicita nem armazena senhas reais. A autenticação segura está implementada na API em `server/`.
-
-## Desenvolvimento do frontend
-
-```bash
-npm install
-cp .env.example .env
-npm start
-```
-
-O frontend funciona sem `REACT_APP_API_URL` usando dados locais. Para usar persistência real, aponte essa variável para a API.
-
-## Build de produção
-
-```bash
-CI=true npm run build
-```
-
-O arquivo `netlify.toml` contém o build e o redirecionamento necessários para rotas do React. A API possui documentação própria em [`server/README.md`](server/README.md).
-
-## Segurança
-
-- credenciais ficam apenas em variáveis de ambiente;
-- senhas são armazenadas com `bcrypt`;
-- tokens JWT têm duração limitada;
-- rotas são protegidas por função;
-- consultas do responsável são limitadas à própria empresa;
-- payloads são validados com Zod;
-- a API usa Helmet, CORS restritivo e rate limiting;
-- horários duplicados são impedidos por uma restrição no banco.
+- autenticação real com senha protegida por `bcrypt` e JWT em cookie `HttpOnly`;
+- controle de acesso para administrador, responsável e cliente;
+- isolamento dos dados por estabelecimento;
+- cadastro de empresas e responsáveis somente pelo administrador;
+- serviços, preços, profissionais, identidade visual e expediente por empresa;
+- consulta de disponibilidade e bloqueio transacional de horários duplicados;
+- histórico de status dos agendamentos e trilha de auditoria;
+- PostgreSQL serverless no Neon via Prisma;
+- confirmação opcional pela API oficial do WhatsApp Cloud;
+- frontend e API implantados no mesmo projeto Vercel.
 
 ## Stack
 
-React 18, React Router, Node.js 22, Express 5, Prisma, PostgreSQL, Zod e WhatsApp Cloud API.
+React 18, React Router 5, Express 5, Prisma 6, PostgreSQL, Zod, JWT, bcrypt e WhatsApp Cloud API.
+
+## Desenvolvimento
+
+1. Copie `.env.example` para `.env` e use valores locais seguros.
+2. Instale as dependências com `npm install`.
+3. Aplique o schema com `npm run db:deploy`.
+4. Crie o administrador inicial com `npm run db:seed`.
+5. Inicie o frontend com `npm start` e a API local com `node server/src/server.js`.
+
+O frontend usa a API na mesma origem por padrão. Em desenvolvimento separado, defina `REACT_APP_API_URL` apenas se a API estiver em outro domínio.
+
+## Banco e administrador inicial
+
+As migrações ficam em `server/prisma/migrations`. O seed é idempotente e exige `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD`. A senha deve existir somente no ambiente protegido; não há credenciais padrão no repositório.
+
+```bash
+npm run db:deploy
+npm run db:seed
+```
+
+## Produção na Vercel
+
+Configure no projeto, para `Production`, `Preview` e `Development` quando aplicável:
+
+- `DATABASE_URL`: conexão PostgreSQL agrupada do Neon;
+- `JWT_SECRET`: valor aleatório de alta entropia com pelo menos 32 caracteres;
+- `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD`: usados somente pelo seed inicial;
+- `CORS_ORIGINS`: origens autorizadas, separadas por vírgula;
+- variáveis `WHATSAPP_*` quando o envio automático estiver ativo.
+
+Depois de vincular as variáveis, execute as migrações e o seed uma única vez antes de promover o primeiro deploy com autenticação real.
+
+## Segurança
+
+Senhas nunca são devolvidas pela API. Sessões usam cookies `HttpOnly`, `Secure` em produção e `SameSite=Lax`. Todas as operações privadas verificam o usuário ativo no banco, a função autorizada e o vínculo com a empresa. Payloads são validados, a API aplica Helmet, CORS restritivo e limitação de requisições.
+
+## Verificação
+
+```bash
+CI=true npm run build
+npm test -- --runInBand
+npm run lint
+```

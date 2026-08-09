@@ -1,36 +1,28 @@
 # AgendaPro API
 
-API multiempresa para agendamentos de barbearias, salões e clínicas. A aplicação aplica isolamento por empresa, controle de acesso por função e confirmação opcional pela API oficial do WhatsApp Cloud.
+API Express/Prisma da plataforma AgendaPro. Em produção ela é exposta pela função `api/index.js` no mesmo domínio do frontend.
 
-## Perfis e permissões
+## Perfis
 
-- `PLATFORM_ADMIN`: cria estabelecimentos e o primeiro perfil responsável.
-- `BUSINESS_OWNER`: gerencia apenas serviços, profissionais, horários e reservas da própria empresa.
-- `CUSTOMER`: consulta os próprios agendamentos.
+- `PLATFORM_ADMIN`: administra empresas, responsáveis e configurações globais.
+- `BUSINESS_OWNER`: acessa somente o estabelecimento ao qual está vinculado.
+- `CUSTOMER`: consulta e cancela somente os próprios agendamentos.
 
-## Execução local
+## Comandos
 
-1. Copie `.env.example` para `.env` e preencha valores locais.
-2. Instale as dependências com `npm install`.
-3. Crie a estrutura com `npm run db:dev -- --name initial`.
-4. Inicie com `npm run dev`.
+```bash
+npm install
+npm run db:migrate
+npm run db:seed
+npm run dev
+```
 
-A API responde em `http://localhost:4000` e o diagnóstico está em `GET /health`.
+O diagnóstico público está em `GET /health`; ele informa somente se banco e autenticação foram configurados, sem revelar valores.
 
 ## WhatsApp Cloud
 
-O envio automático usa um template previamente aprovado na Meta. Configure `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_TEMPLATE_NAME` e `WHATSAPP_TEMPLATE_LANGUAGE`. O token permanece apenas no backend; nunca deve ser enviado ao React ou versionado.
+O envio automático usa um template aprovado pela Meta com nome, estabelecimento, serviço, data e horário. Configure as variáveis `WHATSAPP_*` apenas no ambiente protegido. Se o provedor não estiver configurado ou recusar a mensagem, o agendamento permanece salvo e a interface oferece contato manual com o estabelecimento.
 
-Parâmetros esperados no corpo do template, nesta ordem:
+## Persistência e auditoria
 
-1. nome do cliente;
-2. nome do estabelecimento;
-3. serviço;
-4. data;
-5. horário.
-
-Sem essas variáveis, o agendamento continua sendo criado e a interface oferece uma confirmação manual pelo WhatsApp.
-
-## Implantação
-
-Use PostgreSQL gerenciado e execute `npm run db:migrate` antes de `npm start`. Configure `CORS_ORIGINS` com os domínios reais do frontend separados por vírgula.
+O schema PostgreSQL mantém usuários, empresas, serviços, profissionais, agendamentos, histórico de status, configurações e auditoria. Uma restrição parcial no banco impede dois agendamentos ativos para o mesmo profissional, data e horário, preservando a possibilidade de reutilizar um horário cancelado.
